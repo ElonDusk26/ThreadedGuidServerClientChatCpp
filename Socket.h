@@ -95,7 +95,7 @@ class Socket
         {
             perror("error connecting to server");
         }
-        connOut.connfd = socketfd; //bad code: set the connectionfd to the socket fd. 
+        connOut.connfd = socketfd; //bad code: sets the connectionfd to the socket fd. 
         return connOut;
     }
 

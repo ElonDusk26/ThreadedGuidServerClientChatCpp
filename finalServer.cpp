@@ -1,12 +1,16 @@
 #include "Socket.hpp"
 #include <thread>
+#include <vector>
 
 void printIncomingData(Socket::conn* conn)
 {
     std::string str;
     while (true)
     {
-        conn->connRecv(str);
+        if(conn->connRecv(str) < 0)
+        {
+            break;
+        }
         std::cout << str << std::endl;
     }
     
@@ -27,7 +31,10 @@ int main()
     while (true)
     {
         std::getline(std::cin, str);
-        newConn.connSend(str);
+        if(newConn.connSend(str) < 0)
+        {
+            break;
+        }
     }
     
 

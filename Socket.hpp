@@ -28,9 +28,10 @@ class Socket
             memset(&buff, 0, sizeof(buff)); //reset buffer
             strcpy(buff, string.c_str());
             int res = send(connfd, &buff, sizeof(buff), 0); //send data using target file descriptor
-            if(res < 0)
+            if(res <= 0)
             {
                 perror("error sending data");
+                return -1;
             }
             return res;
         }
@@ -38,7 +39,7 @@ class Socket
         {
             memset(&buff, 0, sizeof(buff));
             int res = recv(connfd, &buff, sizeof(buff), 0);
-            if(res < 0)
+            if(res <= 0)
             {
                 perror("error receiving data");
                 return -1;

@@ -12,7 +12,7 @@
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "-pthread",
-                "-std=c++11"
+                "-std=c++17"
             ],
             "options": {
                 "cwd": "${fileDirname}"

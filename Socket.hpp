@@ -18,16 +18,26 @@ class Socket
 
     public:
 
+    bool status = true;
+
     struct conn
     {
-        int connfd;
-        char buff[1024] = {}; //reused buffer
+        int connfd = -1;
 
-        int connSend(std::string string)
+        int connSend(std::string &string)
         {
-            memset(&buff, 0, sizeof(buff)); //reset buffer
-            strcpy(buff, string.c_str());
-            int res = send(connfd, &buff, sizeof(buff), 0); //send data using target file descriptor
+            auto buffer = string.c_str();
+            int size = string.size();
+
+            //std::cout << "sending " << string << " with an allocated buffer of " << size << std::endl;
+
+            int res = send(connfd, &size, sizeof(int), 0); //send size of the string to be sent
+            if(res <= 0)
+            {
+                perror("error sending data");
+                return -1;
+            }
+            res = send(connfd, buffer, size, 0); //send the string
             if(res <= 0)
             {
                 perror("error sending data");
@@ -37,14 +47,31 @@ class Socket
         }
         int connRecv(std::string &string)
         {
-            memset(&buff, 0, sizeof(buff));
-            int res = recv(connfd, &buff, sizeof(buff), 0);
+            string.clear();
+            int size = 0;
+            int res = recv(connfd, &size, sizeof(int), 0); //get the size of the incoming string
             if(res <= 0)
             {
                 perror("error receiving data");
                 return -1;
             }
-            string = std::string(buff); //type cast char into string;
+            
+            //std::cout << "receiving string with a size of " << size << std::endl;
+
+            char* buffer = new char[size]; //allocate buffer with the size of the incoming data
+
+            memset(buffer, 0, size); //clear the buffer (not needed?)
+
+            res = recv(connfd, buffer, size, 0); //fill the buffer
+            if(res <= 0)
+            {
+                perror("error receiving data");
+                return -1;
+            }
+            string = std::string(buffer, size); //set return string to the buffer
+
+            delete[] buffer; //deallocate buffer
+
             return res;
         }
         ~conn()
@@ -62,7 +89,7 @@ class Socket
         if (socketfd < 0)
         {
             perror("error creating socket");
-            bool status = false;
+            status = false;
         } 
     }
     ~Socket()
@@ -92,7 +119,7 @@ class Socket
     {
         conn connOut;
         connect(socketfd, (sockaddr*)&serverInfo, serverInfoLen); //connect to target server
-        if(connOut.connfd < 0)
+        if(socketfd < 0)
         {
             perror("error connecting to server");
         }
@@ -107,4 +134,9 @@ class Socket
         return connOut;
     }
 
+    int acceptConn(conn& inConn)
+    {
+        inConn.connfd = accept(socketfd, NULL, NULL); //accept incoming connection
+        return inConn.connfd;
+    }
 };

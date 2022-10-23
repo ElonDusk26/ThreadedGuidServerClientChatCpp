@@ -17,3 +17,7 @@ threaded_server.dSYM/Contents/Resources/DWARF/threaded_server
 finalServer
 client.dSYM/Contents/Resources/DWARF/client
 finalServer.dSYM/Contents/Resources/DWARF/finalServer
+finalServer.cpp
+server.cpp
+serverClassed.cpp
+serverClassedrefactored.cpp

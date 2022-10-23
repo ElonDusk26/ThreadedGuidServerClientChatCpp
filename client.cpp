@@ -31,7 +31,7 @@ char getch(bool block = false) {
         return (buf);
 }
 
-std::string inputString;
+std::string inputString; //NOT THREAD SAFE
 
 void printIncomingData(Socket::conn* conn)
 {
@@ -48,7 +48,7 @@ void printIncomingData(Socket::conn* conn)
 
         //write new line and set the next line to the already written line.
 
-        std::cout << "\r" << str << std::endl << inputString << std::flush;
+        std::cout << "\r" << str << std::endl << inputString << std::flush; 
     }
     
 }

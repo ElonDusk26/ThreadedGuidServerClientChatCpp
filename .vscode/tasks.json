@@ -9,6 +9,7 @@
                 "-fansi-escape-codes",
                 "-g",
                 "${file}",
+                "Socket.cpp",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "-pthread",

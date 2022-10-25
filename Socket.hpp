@@ -1,8 +1,8 @@
+#include <iostream>
 #include <string.h>
 #include <sys/socket.h>
-#include <iostream>
 #include <netinet/in.h>
-#pragma once
+
 class Socket
 {
     int socketfd; //socket file descriptor

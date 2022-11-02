@@ -89,19 +89,15 @@ int Socket::conn::connRecv(std::string &string)
     
     //std::cout << "receiving string with a size of " << size << std::endl;
 
-    char* buffer = new char[size]; //allocate buffer with the size of the incoming data
+    auto buffer = std::make_unique<char[]>(size);//new char[size]; //allocate buffer with the size of the incoming data
 
-    memset(buffer, 0, size); //clear the buffer (not needed?)
-
-    res = recv(connfd, buffer, size, 0); //fill the buffer
+    res = recv(connfd, buffer.get(), size, 0); //fill the buffer
     if(res <= 0)
     {
         perror("error receiving data");
         return -1;
     }
-    string = std::string(buffer, size); //set return string to the buffer
-
-    delete[] buffer; //deallocate buffer
+    string = std::string(buffer.get(), size); //set return string to the buffer
 
     return res;
 }

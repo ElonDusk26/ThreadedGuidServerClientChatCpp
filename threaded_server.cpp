@@ -9,7 +9,7 @@ class Server
     Socket::conn conns[16] = {}; //connfd of -1 equals unused
     std::thread threads[16] = {};
 
-    Socket* serverSock;
+    std::unique_ptr<Socket> serverSock;
 
     int getEmptyConnIndex()
     {
@@ -60,7 +60,7 @@ class Server
     public:
     int setupServer(const char* ip, int port)
     {
-        serverSock = new Socket(ip, port);
+        serverSock = std::make_unique<Socket>(ip, port);
 
         if(!serverSock->status)
         {

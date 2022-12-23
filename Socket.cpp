@@ -30,6 +30,9 @@ Socket::~Socket()
 
 int Socket::setSocketToListen(int listenQueue)
 {
+    const int reuse = 1;
+    setsockopt(socketfd, SOL_SOCKET, SO_REUSEADDR, (const void*)&reuse, sizeof(reuse));
+
     int res = bind(socketfd, (sockaddr*)&serverInfo, serverInfoLen); //bind socket to ip and port
     if(res < 0)
     {
